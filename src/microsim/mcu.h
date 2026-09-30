@@ -43,6 +43,11 @@ class Mcu : public Chip, public Linker
         QString program() { return m_eMcu.getFileName(); }
         void setProgram( QString pro );
 
+        // Public access to this MCU's USART peripherals, used by the headless
+        // socket API (SimCommand) to find a target for serial/send_serial.
+        UsartModule* getUsart( int n ); // 1-based
+        int usartCount();
+
         bool autoLoad() { return m_autoLoad; }
         void setAutoLoad( bool al ) { m_autoLoad = al; }
 

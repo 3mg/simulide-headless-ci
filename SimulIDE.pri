@@ -112,11 +112,13 @@ macx {
     QMAKE_CXXFLAGS -= -stdlib=libc++
     QMAKE_LFLAGS   -= -stdlib=libc++
 
-# To use gcc in MacOs you must force it.
-# Edit to match your system:
-    QMAKE_CC   = /usr/local/Cellar/gcc@7/7.5.0_4/bin/gcc-7
-    QMAKE_CXX  = /usr/local/Cellar/gcc@7/7.5.0_4/bin/g++-7
-    QMAKE_LINK = /usr/local/Cellar/gcc@7/7.5.0_4/bin/g++-7
+# Upstream forces a specific Homebrew gcc@7 here, which Homebrew has since
+# deleted. Our fork target is Linux CI anyway; use the system clang for local
+# macOS builds instead (same choice our 1.1.0-SR2 fork made for the same
+# reason).
+    QMAKE_CC   = /usr/bin/clang
+    QMAKE_CXX  = /usr/bin/clang++
+    QMAKE_LINK = /usr/bin/clang++
 }
 
 contains( QMAKE_HOST.arch, arm64|aarch64 ) | contains( QMAKE_CC, .*aarch64.* ){
@@ -155,10 +157,10 @@ INCLUDEPATH += $$MOC_DIR
 DESTDIR = $$TARGET_PREFIX
 
 runLrelease.commands = \
-    lrelease $$PWD/resources/translations/*.ts; \
-    lrelease $$PWD/resources/translations/qt/*.ts; \
-    $(MOVE) $$PWD/resources/translations/*.qm $$PWD/resources/qm; \
-    $(MOVE) $$PWD/resources/translations/qt/*.qm $$PWD/resources/qm;
+    lrelease $$shell_quote($$PWD/resources/translations)/*.ts; \
+    lrelease $$shell_quote($$PWD/resources/translations/qt)/*.ts; \
+    $(MOVE) $$shell_quote($$PWD/resources/translations)/*.qm $$shell_quote($$PWD/resources/qm); \
+    $(MOVE) $$shell_quote($$PWD/resources/translations/qt)/*.qm $$shell_quote($$PWD/resources/qm);
 
 QMAKE_EXTRA_TARGETS += runLrelease
 PRE_TARGETDEPS      += runLrelease

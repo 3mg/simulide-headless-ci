@@ -47,6 +47,10 @@ class AvrUsi : public McuModule, public eElement
         bool m_sdaState;
         bool m_DoState;
 
+        // USI mode 3 (TWI): true while we're holding SCL low (clock stretch)
+        // after a counter overflow, waiting for firmware to service the ISR.
+        bool m_sclHold;
+
         uint8_t* m_dataReg;
         uint8_t* m_bufferReg;
 

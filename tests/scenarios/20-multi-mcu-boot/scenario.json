@@ -1,0 +1,16 @@
+{
+  "name": "multi-mcu-boot",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-20a boot:ready 5000", "equals": "found" },
+    { "cmd": "wait_serial mega328-20b node:2:ready 5000", "equals": "found" },
+    { "cmd": "wait_serial mega328-20c tick-start 5000", "equals": "found" },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-20a", "contains": "boot:start" },
+    { "cmd": "serial mega328-20a", "contains": "boot:ready" },
+    { "cmd": "serial mega328-20b", "contains": "node:2:boot" },
+    { "cmd": "serial mega328-20b", "contains": "node:2:ready" },
+    { "cmd": "serial mega328-20c", "contains": "tick-start" }
+  ]
+}

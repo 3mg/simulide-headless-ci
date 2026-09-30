@@ -29,6 +29,7 @@ void TwiModule::initialize()
     m_lastState = I2C_IDLE;
 
     m_toggleScl  = false;
+    m_waitSCL    = false;
     m_genCall    = false;
 
     m_lastSDA = true; // SDA High = inactive
@@ -47,10 +48,21 @@ void TwiModule::runEvent()
 
     if( m_toggleScl )
     {
-        setSCL( clkLow );     // High if is LOW, LOW if is HIGH
+        bool raising = clkLow;   // About to request SCL go HIGH
+        setSCL( clkLow );        // High if is LOW, LOW if is HIGH
         m_toggleScl = false;
+        if( raising ) m_waitSCL = true; // verify next tick it actually rose
         Simulator::self()->addEvent( m_clockPeriod/2, this );
         return;
+    }
+    if( m_waitSCL )    // Checking whether our SCL-raise request above stuck
+    {
+        if( clkLow )   // Still low: a slave is clock-stretching, keep polling
+        {
+            Simulator::self()->addEvent( m_clockPeriod/8, this );
+            return;
+        }
+        m_waitSCL = false; // Released: proceed below with the now-confirmed clkLow
     }
     getSdaState();               // Update state of SDA pin
 
@@ -265,6 +277,7 @@ void TwiModule::setMode( twiMode_t mode )
     m_mode = mode;
     m_i2cState = I2C_IDLE;
     m_toggleScl  = false;
+    m_waitSCL    = false;
 }
 
 void TwiModule::setSCL( bool st ) { m_scl->scheduleState( st, 0 ); }

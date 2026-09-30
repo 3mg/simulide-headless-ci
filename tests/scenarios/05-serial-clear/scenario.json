@@ -1,0 +1,10 @@
+{
+  "name": "serial-clear",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-5 hello 5000", "equals": "found" },
+    { "cmd": "serial_clear mega328-5", "equals": "ok" },
+    { "cmd": "serial mega328-5", "equals": "" }
+  ]
+}

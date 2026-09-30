@@ -1,3 +1,26 @@
+# SimulIDE (headless/CI fork)
+
+This is a fork of [Arcachofo/SimulIDE-dev](https://github.com/Arcachofo/SimulIDE-dev)
+adding a real headless mode and a Unix-socket control API, for driving AVR
+circuit simulations from automated tests (CI, `pytest`/`unittest`, etc.)
+without a display server. See [CHANGES.md](CHANGES.md) for exactly what's
+different from upstream, and [tests/README.md](tests/README.md) for the
+socket API reference and a 31-scenario regression suite you can run as a
+usage example.
+
+Quick start:
+
+```bash
+cd build_XX && qmake SimulIDE_Build.pro -spec linux-g++ CONFIG+=release && make -j"$(nproc)"
+cd ../tests && make test
+```
+
+Or via Docker: `docker build -f docker/Dockerfile -t simulide-headless .`
+
+Everything below this point is upstream's own README, unmodified.
+
+---
+
 # SimulIDE 
 
 Electronic Circuit Simulator

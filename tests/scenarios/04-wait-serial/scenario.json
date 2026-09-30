@@ -1,0 +1,10 @@
+{
+  "name": "wait-serial",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-4 hello 5000", "equals": "found" },
+    { "sleep_ms": 100 },
+    { "cmd": "serial mega328-4", "contains": "hello simulide" }
+  ]
+}

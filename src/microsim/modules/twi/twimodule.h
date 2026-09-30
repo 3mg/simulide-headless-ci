@@ -89,6 +89,12 @@ class TwiModule : public eClockedDevice, public TransModule
         bool m_lastSDA;
         bool m_sdaState;
         bool m_toggleScl;
+        // True right after requesting SCL go HIGH, until we've confirmed the
+        // pin actually reached HIGH. A slave clock-stretching (holding SCL
+        // low via admittance, not pin capture) can make that request silently
+        // fail; without this we'd fall into the i2cState switch below with a
+        // stale clkLow and re-process the same bit/ack twice.
+        bool m_waitSCL;
         bool m_isAddr;
         bool m_write;
         bool m_sendACK;

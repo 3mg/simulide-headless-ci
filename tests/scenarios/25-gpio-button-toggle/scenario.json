@@ -1,0 +1,15 @@
+{
+  "name": "gpio-button-toggle",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-25 gpio-ready 5000", "equals": "found", "timeout": 10 },
+    { "cmd": "pin_voltage mega328-25 PORTD4", "parse": "float", "min": 4.5 },
+    { "cmd": "pin_voltage mega328-25 PORTD5", "parse": "float", "max": 0.5 },
+    { "cmd": "set_control Push-25 press", "equals": "ok" },
+    { "cmd": "wait_serial mega328-25 gpio-toggled 3000", "equals": "found", "timeout": 8 },
+    { "cmd": "set_control Push-25 release", "equals": "ok" },
+    { "cmd": "pin_voltage mega328-25 PORTD4", "parse": "float", "max": 0.5 },
+    { "cmd": "pin_voltage mega328-25 PORTD5", "parse": "float", "min": 4.5 }
+  ]
+}

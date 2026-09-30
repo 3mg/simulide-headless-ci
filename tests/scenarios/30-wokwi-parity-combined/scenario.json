@@ -1,0 +1,23 @@
+{
+  "name": "wokwi-parity-combined",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-30 gpio-ready 5000", "equals": "found", "timeout": 10 },
+    { "cmd": "set_control Pot-30 0", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-30 PinM", "parse": "float", "min": 4.5 },
+    { "cmd": "set_control Pot-30 5000", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-30 PinM", "parse": "float", "min": 2.0, "max": 3.0 },
+    { "cmd": "pin_voltage mega328-30 PORTD4", "parse": "float", "min": 4.5 },
+    { "cmd": "pin_voltage mega328-30 PORTD5", "parse": "float", "max": 0.5 },
+    { "cmd": "set_control Push-30 press", "equals": "ok" },
+    { "cmd": "wait_serial mega328-30 gpio-toggled 3000", "equals": "found", "timeout": 8 },
+    { "cmd": "set_control Push-30 release", "equals": "ok" },
+    { "cmd": "pin_voltage mega328-30 PORTD4", "parse": "float", "max": 0.5 },
+    { "cmd": "pin_voltage mega328-30 PORTD5", "parse": "float", "min": 4.5 },
+    { "cmd": "serial mega328-30", "contains": "gpio-ready" },
+    { "cmd": "serial mega328-30", "contains": "gpio-toggled" }
+  ]
+}

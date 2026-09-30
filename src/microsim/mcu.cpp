@@ -27,6 +27,7 @@
 #include "mcumonitor.h"
 #include "memdata.h"
 #include "mcuuart.h"
+#include "usartmodule.h"
 #include "mcuintosc.h"
 #include "utils.h"
 #include "watcher.h"
@@ -41,6 +42,25 @@
 #define tr(str) simulideTr("Mcu",str)
 
 Mcu* Mcu::m_pSelf = nullptr;
+
+UsartModule* Mcu::getUsart( int n ) // 1-based
+{
+    int count = 0;
+    for( TransModule* tm : m_eMcu.m_transModules )
+    {
+        UsartModule* u = dynamic_cast<UsartModule*>( tm );
+        if( u && ++count == n ) return u;
+    }
+    return nullptr;
+}
+
+int Mcu::usartCount()
+{
+    int count = 0;
+    for( TransModule* tm : m_eMcu.m_transModules )
+        if( dynamic_cast<UsartModule*>( tm ) ) ++count;
+    return count;
+}
 
 LibraryItem* Mcu::libraryItem()
 {

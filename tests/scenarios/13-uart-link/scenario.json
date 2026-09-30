@@ -1,0 +1,11 @@
+{
+  "name": "uart-link",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-12 PONG 5000", "equals": "found" },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-12", "contains": "PING" },
+    { "cmd": "serial mega328-13", "contains": "PONG" }
+  ]
+}

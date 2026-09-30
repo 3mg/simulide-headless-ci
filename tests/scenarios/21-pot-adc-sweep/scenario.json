@@ -1,0 +1,16 @@
+{
+  "name": "pot-adc-sweep",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-21 adc-ready 5000", "equals": "found", "timeout": 10 },
+    { "cmd": "set_control Pot-21 0", "equals": "ok" },
+    { "cmd": "pin_voltage Pot-21 PinM", "parse": "float", "min": 4.5 },
+    { "cmd": "set_control Pot-21 10000", "equals": "ok" },
+    { "cmd": "wait 100", "equals": "ok", "timeout": 10 },
+    { "cmd": "pin_voltage Pot-21 PinM", "parse": "float", "max": 0.5 },
+    { "cmd": "set_control Pot-21 5000", "equals": "ok" },
+    { "cmd": "wait 100", "equals": "ok", "timeout": 10 },
+    { "cmd": "pin_voltage Pot-21 PinM", "parse": "float", "min": 2.0, "max": 3.0 }
+  ]
+}

@@ -23,6 +23,11 @@ class UartRx : public UartTR
         void ignoreData( bool i ) { m_ignoreData = i; }
         void setFifoSize( uint8_t s ) { m_fifoSize = s; }
 
+        // Deliver a byte directly into the receive FIFO, bypassing pin-level
+        // bit sampling. Used by the headless socket API (send_serial) to
+        // simulate incoming serial data without driving RX pin voltages.
+        void injectByte( uint8_t data );
+
     protected:
         void setRxFlags();
         void readBit();

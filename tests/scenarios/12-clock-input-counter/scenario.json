@@ -1,0 +1,10 @@
+{
+  "name": "clock-input-counter",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-11 clock-count-ok 5000", "equals": "found" },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-11", "contains": "clock-count-ok" }
+  ]
+}

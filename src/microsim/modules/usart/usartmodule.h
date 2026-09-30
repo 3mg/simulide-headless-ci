@@ -5,7 +5,9 @@
 
 #pragma once
 
-#include<QList>
+#include <QList>
+#include <QByteArray>
+#include <QMutex>
 
 #include "mcumodule.h"
 #include "e-element.h"
@@ -59,11 +61,20 @@ class UsartModule : public TransModule
         virtual void setBit9Rx( uint8_t bit ){;}
 
         virtual void sendByte( uint8_t data );
+        // Simulate a byte arriving on RX, as if sent over the wire.
+        // Used by the headless socket API's send_serial command.
+        void receiveByte( uint8_t data );
         virtual void bufferEmpty(){;}
         virtual void frameSent( uint8_t data );
         virtual void readByte( uint8_t data ){;}
         virtual void byteReceived( uint8_t data );
         virtual void setRxFlags( uint16_t frame ){;}
+
+        // In-memory serial capture buffer (always active, no GUI needed).
+        // Thread-safe: simulation runs in a parallel thread.
+        static const int SERIAL_RING_SIZE = 65536;
+        QByteArray serialCapture()      { QMutexLocker lk(&m_captureMutex); return m_captureBuffer; }
+        void       serialCaptureClear() { QMutexLocker lk(&m_captureMutex); m_captureBuffer.clear(); }
 
     protected:
         void setPeriod( uint64_t period );
@@ -82,6 +93,9 @@ class UsartModule : public TransModule
         parity_t m_parity;
 
     private:
+        QByteArray m_captureBuffer; // in-memory ring buffer for serial capture
+        mutable QMutex m_captureMutex;
+
         uint8_t m_dataBits;
         uint8_t m_dataMask;
 };

@@ -1,0 +1,13 @@
+<circuit version="1.1.0-SR2" rev="260418" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<!-- Wokwi parity: three independent MCUs booting concurrently, each verified separately -->
+<!-- MCU A: boot banner firmware -->
+<item itemtype="MCU" CircId="mega328-20a" mainComp="false" Show_id="true" Show_Val="true" Pos="-160,0" rotation="0" hflip="1" vflip="1" label="node-A" idLabPos="-12,119" labelrot="0" valLabPos="13,72" valLabRot="-90" Frequency="16 MHz" Program="../../firmware-assets/boot-banner328.hex" Auto_Load="false" saveEepr="false" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" SerialMon="-1" />
+
+<!-- MCU B: node-sensor firmware -->
+<item itemtype="MCU" CircId="mega328-20b" mainComp="false" Show_id="true" Show_Val="true" Pos="0,0" rotation="0" hflip="1" vflip="1" label="node-B" idLabPos="-12,119" labelrot="0" valLabPos="13,72" valLabRot="-90" Frequency="16 MHz" Program="../../firmware-assets/node-sensor328.hex" Auto_Load="false" saveEepr="false" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" SerialMon="-1" />
+
+<!-- MCU C: periodic tick firmware -->
+<item itemtype="MCU" CircId="mega328-20c" mainComp="false" Show_id="true" Show_Val="true" Pos="160,0" rotation="0" hflip="1" vflip="1" label="node-C" idLabPos="-12,119" labelrot="0" valLabPos="13,72" valLabRot="-90" Frequency="16 MHz" Program="../../firmware-assets/periodic-tick328.hex" Auto_Load="false" saveEepr="false" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" SerialMon="-1" />
+
+</circuit>

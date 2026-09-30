@@ -88,6 +88,15 @@ void UartRx::rxEnd()
     if( m_period ) Simulator::self()->cancelEvents( this );
 }
 
+void UartRx::injectByte( uint8_t data )
+{
+    // Build a well-formed frame: data bits + a valid stop bit, no parity/
+    // framing/overrun errors, matching whatever mDATABITS/mPARITY the usart
+    // is currently configured for.
+    uint16_t frame = (uint16_t)data | ( 1 << (mDATABITS+mPARITY) );
+    byteReceived( frame );
+}
+
 void UartRx::byteReceived( uint16_t frame )
 {
     if( mDATABITS == 9 && m_ignoreData && (frame & 1<<8) == 0 ) return; // Multi-proccesor data frame

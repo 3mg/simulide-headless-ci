@@ -55,6 +55,7 @@ void AvrUsi::reset()
     m_clockMode = 0;
     m_mode = 0;
     m_counter = 0;
+    m_sclHold = false;
 
     if( !m_DOpin ) qDebug() << "AvrUsi::reset: Error: null DO Pin";
     if( !m_DIpin ) qDebug() << "AvrUsi::reset: Error: null DI Pin";
@@ -178,6 +179,13 @@ void AvrUsi::configureA( uint8_t newUSICR )
 
 void AvrUsi::configureB( uint8_t newUSISR )
 {
+    // Release SCL clock stretch if firmware is writing USISR (signals ISR completion)
+    if( m_sclHold && m_CKpin )
+    {
+        m_sclHold = false;
+        m_CKpin->setExtraSource( 0, 0 ); // release SCL — remove open-drain pull
+    }
+
     m_counter = getRegBitsVal( newUSISR, m_USICNT ); // USICNT[3:0]: Counter Value
 
     bool oldUsiSR = getRegBitsBool( m_USIPF );
@@ -198,7 +206,18 @@ void AvrUsi::stepCounter()  // increment counter
     if( ++m_counter == 16 ){
         m_counter = 0;
         *m_bufferReg = *m_dataReg; // Transfer Data Register content to Buffer Register
-        if( m_interrupt ) m_interrupt->raise();
+
+        if( m_interrupt )
+        {
+            // USI mode 3 (TWI): hold SCL low (clock stretching) only if overflow ISR is enabled.
+            // If ISR is disabled, firmware won't write USISR to release — SCL would stay low forever.
+            if( m_mode == 3 && m_CKpin && !m_sclHold && m_interrupt->enabled() )
+            {
+                m_sclHold = true;
+                m_CKpin->setExtraSource( 0, 1/1e-9 ); // strong pull to GND, open-drain style
+            }
+            m_interrupt->raise();
+        }
     }
 }
 

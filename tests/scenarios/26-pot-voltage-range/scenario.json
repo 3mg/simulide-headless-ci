@@ -1,0 +1,21 @@
+{
+  "name": "pot-voltage-range",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-26 PinM", "parse": "float", "min": 2.0, "max": 3.0 },
+    { "cmd": "set_control Pot-26 0", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-26 PinM", "parse": "float", "min": 4.5 },
+    { "cmd": "set_control Pot-26 2500", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-26 PinM", "parse": "float", "min": 3.5, "max": 4.0 },
+    { "cmd": "set_control Pot-26 7500", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-26 PinM", "parse": "float", "min": 1.0, "max": 2.0 },
+    { "cmd": "set_control Pot-26 10000", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-26 PinM", "parse": "float", "max": 0.5 }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "analog-pot",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-14 adc-low 5000", "equals": "found" },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-14", "contains": "adc-low" }
+  ]
+}

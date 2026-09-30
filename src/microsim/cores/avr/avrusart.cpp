@@ -172,7 +172,7 @@ void AvrUsart::sendByte(  uint8_t data ) // Buffer is being written
 
 void AvrUsart::frameSent( uint8_t data )
 {
-    printOut( data );
+    UsartModule::frameSent( data ); // printOut() + in-memory serial capture
 
     if( getRegBitsBool( *m_UCSRnA, m_UDRE ) ) // Frame sent & Buffer is empty
         m_sender->raiseInt();                 // Raise USART Transmit Complete

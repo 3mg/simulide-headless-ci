@@ -1,0 +1,12 @@
+{
+  "name": "timed-periodic-output",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-18 tick-start 5000", "equals": "found" },
+    { "cmd": "wait 1500", "equals": "ok", "timeout": 30 },
+    { "cmd": "serial mega328-18", "contains": "tick:1" },
+    { "cmd": "wait 1000", "equals": "ok", "timeout": 30 },
+    { "cmd": "serial mega328-18", "contains": "tick:2" }
+  ]
+}

@@ -73,14 +73,29 @@ void UsartModule::sendByte( uint8_t data )  // Buffer is being written
     else                m_sender->processData( data );
 }
 
+void UsartModule::receiveByte( uint8_t data )
+{
+    m_receiver->injectByte( data );
+}
+
 void UsartModule::frameSent( uint8_t data )
 {
     printOut( data );
+
+    QMutexLocker lk( &m_captureMutex );
+    if( m_captureBuffer.size() >= SERIAL_RING_SIZE )
+        m_captureBuffer.remove( 0, m_captureBuffer.size() - SERIAL_RING_SIZE + 1 );
+    m_captureBuffer.append( (char)data );
 }
 
 void UsartModule::byteReceived( uint8_t data )
 {
     printIn( data );
+
+    QMutexLocker lk( &m_captureMutex );
+    if( m_captureBuffer.size() >= SERIAL_RING_SIZE )
+        m_captureBuffer.remove( 0, m_captureBuffer.size() - SERIAL_RING_SIZE + 1 );
+    m_captureBuffer.append( (char)data );
 }
 
 

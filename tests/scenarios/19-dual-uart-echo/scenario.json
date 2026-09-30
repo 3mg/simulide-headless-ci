@@ -1,0 +1,12 @@
+{
+  "name": "dual-uart-echo",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-19a link-ok 20000", "equals": "found", "timeout": 25 },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-19a", "contains": "PING" },
+    { "cmd": "serial mega328-19a", "contains": "link-ok" },
+    { "cmd": "serial mega328-19b", "contains": "PONG" }
+  ]
+}

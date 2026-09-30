@@ -1,0 +1,131 @@
+<circuit version="1.1.0-SR2" rev="260312" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<item itemtype="Subcircuit" CircId="Mega-1" mainComp="false" Show_id="true" Show_Val="false" Pos="-388,-216" rotation="0" hflip="1" vflip="1" label="Mega-1" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Logic_Symbol="false">
+<mainCompProps MainCompId="mega2560-63" Frequency="16 MHz" Program="../../../../../hardware-tests/test3-attiny85-encoder-i2c-slave/mega_master/.pio/build/megaatmega2560/firmware.hex" Auto_Load="false" saveEepr="true" MainMcu="true" SerialMon="1" />
+</item>
+
+<item itemtype="Tunnel" CircId="Tunnel-8" mainComp="false" Show_id="false" Show_Val="false" Pos="-400,-168" rotation="0" hflip="1" vflip="1" label="SCL" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SCL" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-9" mainComp="false" Show_id="false" Show_Val="false" Pos="-400,-160" rotation="0" hflip="1" vflip="1" label="SDA" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SDA" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-12" mainComp="false" Show_id="false" Show_Val="false" Pos="36,-60" rotation="0" hflip="-1" vflip="1" label="Tunnel-12" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SDA" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-13" mainComp="false" Show_id="false" Show_Val="false" Pos="36,-76" rotation="0" hflip="-1" vflip="1" label="Tunnel-13" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SCL" IsBus="false" />
+
+<item itemtype="Ground" CircId="Ground-30" mainComp="false" Show_id="false" Show_Val="false" Pos="-80,-312" rotation="-180" hflip="1" vflip="1" label="Ground-30" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
+
+<item itemtype="Push" CircId="Push-32" mainComp="false" Show_id="false" Show_Val="false" Pos="-8,-240" rotation="0" hflip="1" vflip="1" label="Push-32" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1" />
+
+<item itemtype="Push" CircId="Push-33" mainComp="false" Show_id="false" Show_Val="false" Pos="64,-240" rotation="0" hflip="1" vflip="1" label="Push-33" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1" />
+
+<item itemtype="Push" CircId="Push-34" mainComp="false" Show_id="false" Show_Val="false" Pos="-92,-240" rotation="0" hflip="1" vflip="1" label="Push-34" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1" />
+
+<item itemtype="Push" CircId="Push-35" mainComp="false" Show_id="false" Show_Val="false" Pos="-164,-240" rotation="0" hflip="1" vflip="1" label="Push-35" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Norm_Close="false" Poles="1" />
+
+<item itemtype="Tunnel" CircId="Tunnel-52" mainComp="false" Show_id="false" Show_Val="false" Pos="-76,132" rotation="-90" hflip="1" vflip="1" label="Tunnel-52" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SDA" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-53" mainComp="false" Show_id="false" Show_Val="false" Pos="-84,132" rotation="-90" hflip="1" vflip="1" label="Tunnel-53" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="SCL" IsBus="false" />
+
+<item itemtype="Rail" CircId="Rail-54" mainComp="false" ShowProp="Voltage" Show_id="false" Show_Val="true" Pos="-164,-72" rotation="90" hflip="1" vflip="1" label="Rail-54" idLabPos="-5,-10" labelrot="-90" valLabPos="-12,6" valLabRot="-90" Voltage="5 V" />
+
+<item itemtype="Tunnel" CircId="Tunnel-65" mainComp="false" Show_id="false" Show_Val="false" Pos="-400,-148" rotation="0" hflip="1" vflip="1" label="RX1" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RX1" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-66" mainComp="false" Show_id="false" Show_Val="false" Pos="-192,-148" rotation="0" hflip="1" vflip="1" label="Tunnel-66" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RX1" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-67" mainComp="false" Show_id="false" Show_Val="false" Pos="-400,-132" rotation="0" hflip="1" vflip="1" label="RX2" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RX2" IsBus="false" />
+
+<item itemtype="Tunnel" CircId="Tunnel-68" mainComp="false" Show_id="false" Show_Val="false" Pos="-76,-116" rotation="0" hflip="1" vflip="1" label="Tunnel-68" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Name="RX2" IsBus="false" />
+
+<item itemtype="MCU" CircId="tiny85-10" mainComp="false" ShowProp="Frequency" Show_id="true" Show_Val="true" Pos="-60,-168" rotation="0" hflip="1" vflip="1" label="tiny85-10" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="../../../../../hardware-tests/test3-attiny85-encoder-i2c-slave/slave_0x10/.pio/build/digispark/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" MainMcu="false" />
+
+<item itemtype="Resistor" CircId="Resistor-57" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="-132,-4" rotation="0" hflip="1" vflip="1" label="Resistor-57" idLabPos="-16,-24" labelrot="0" valLabPos="-16,6" valLabRot="0" Resistance="1 kΩ" />
+
+<item itemtype="Resistor" CircId="Resistor-55" mainComp="false" ShowProp="Resistance" Show_id="false" Show_Val="true" Pos="-132,-32" rotation="0" hflip="1" vflip="1" label="Resistor-55" idLabPos="-16,-24" labelrot="0" valLabPos="-16,6" valLabRot="0" Resistance="1 kΩ" />
+
+<item itemtype="Ssd1306" CircId="Ssd1306-17" mainComp="false" Show_id="true" Show_Val="false" Pos="-36,72" rotation="0" hflip="1" vflip="1" label="Ssd1306-17" idLabPos="-32,-60" labelrot="0" valLabPos="-16,20" valLabRot="0" Color="White" Width="128 _px" Height="64 _px" Rotate="true" Control_Code="60" Frequency="100 _kHz" />
+
+<item itemtype="MCU" CircId="tiny85-11" mainComp="false" Show_id="true" Show_Val="false" Pos="-176,-172" rotation="0" hflip="1" vflip="1" label="tiny85-11" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="../../../../../hardware-tests/test3-attiny85-encoder-i2c-slave/slave_0x11/.pio/build/digispark/firmware.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" MainMcu="false" />
+
+<item itemtype="KY040" CircId="KY040-69" mainComp="false" Show_id="false" Show_Val="false" Pos="-240,164" rotation="90" hflip="1" vflip="1" label="KY040-69" idLabPos="-34,20" labelrot="-90" valLabPos="-16,20" valLabRot="0" Steps="20" />
+
+<item itemtype="Node" CircId="Node-36" mainComp="false" Pos="-112,-292" />
+
+<item itemtype="Node" CircId="Node-37" mainComp="false" Pos="-80,-292" />
+
+<item itemtype="Node" CircId="Node-38" mainComp="false" Pos="-24,-292" />
+
+<item itemtype="Node" CircId="Node-15" mainComp="false" Pos="0,-76" />
+
+<item itemtype="Node" CircId="Node-14" mainComp="false" Pos="-16,-60" />
+
+<item itemtype="Node" CircId="Node-58" mainComp="false" Pos="-164,-32" />
+
+<item itemtype="Node" CircId="Node-59" mainComp="false" Pos="-92,-60" />
+
+<item itemtype="Node" CircId="Node-60" mainComp="false" Pos="-68,-76" />
+
+<item itemtype="Connector" uid="Connector-3" startpinid="Mega-1-21" endpinid="Tunnel-8-pin" pointList="-380,-168,-400,-168" />
+
+<item itemtype="Connector" uid="Connector-4" startpinid="Mega-1-20" endpinid="Tunnel-9-pin" pointList="-380,-160,-400,-160" />
+
+<item itemtype="Connector" uid="Connector-59" startpinid="Push-34-pinP0" endpinid="Node-36-1" pointList="-108,-240,-112,-240,-112,-292" />
+
+<item itemtype="Connector" uid="Connector-60" startpinid="Push-35-pinP0" endpinid="Node-36-0" pointList="-180,-240,-180,-292,-112,-292" />
+
+<item itemtype="Connector" uid="Connector-63" startpinid="Node-36-2" endpinid="Node-37-0" pointList="-112,-292,-80,-292" />
+
+<item itemtype="Connector" uid="Connector-64" startpinid="Node-37-2" endpinid="Ground-30-Gnd" pointList="-80,-292,-80,-296" />
+
+<item itemtype="Connector" uid="Connector-65" startpinid="Push-33-pinP0" endpinid="Node-38-1" pointList="48,-240,32,-240,32,-292,-24,-292" />
+
+<item itemtype="Connector" uid="Connector-66" startpinid="Push-32-pinP0" endpinid="Node-38-0" pointList="-24,-240,-24,-292" />
+
+<item itemtype="Connector" uid="Connector-67" startpinid="Node-38-2" endpinid="Node-37-1" pointList="-24,-292,-80,-292" />
+
+<item itemtype="Connector" uid="Connector-140" startpinid="tiny85-10-PORTB3" endpinid="Push-32-switch0pinN" pointList="-68,-152,-76,-152,-76,-196,20,-196,20,-240,8,-240" />
+
+<item itemtype="Connector" uid="Connector-120" startpinid="tiny85-10-PORTB2" endpinid="Node-15-0" pointList="-20,-152,0,-152,0,-76" />
+
+<item itemtype="Connector" uid="Connector-83" startpinid="tiny85-10-PORTB1" endpinid="Push-33-switch0pinN" pointList="-20,-144,92,-144,92,-240,80,-240" />
+
+<item itemtype="Connector" uid="Connector-14" startpinid="Node-15-2" endpinid="Tunnel-13-pin" pointList="0,-76,36,-76" />
+
+<item itemtype="Connector" uid="Connector-10" startpinid="Node-14-2" endpinid="Tunnel-12-pin" pointList="-16,-60,36,-60" />
+
+<item itemtype="Connector" uid="Connector-9" startpinid="tiny85-10-PORTB0" endpinid="Node-14-0" pointList="-20,-136,-16,-136,-16,-60" />
+
+<item itemtype="Connector" uid="Connector-126" startpinid="Node-58-2" endpinid="Resistor-55-lPin" pointList="-164,-32,-148,-32" />
+
+<item itemtype="Connector" uid="Connector-125" startpinid="Rail-54-outnod" endpinid="Node-58-0" pointList="-164,-56,-164,-32" />
+
+<item itemtype="Connector" uid="Connector-124" startpinid="Node-58-1" endpinid="Resistor-57-lPin" pointList="-164,-32,-164,-4,-148,-4" />
+
+<item itemtype="Connector" uid="Connector-141" startpinid="tiny85-10-PORTB4" endpinid="Tunnel-68-pin" pointList="-68,-144,-76,-144,-76,-116" />
+
+<item itemtype="Connector" uid="Connector-143" startpinid="Mega-1-19" endpinid="Tunnel-65-pin" pointList="-380,-152,-400,-152,-400,-148" />
+
+<item itemtype="Connector" uid="Connector-144" startpinid="Mega-1-17" endpinid="Tunnel-67-pin" pointList="-380,-136,-400,-136,-400,-132" />
+
+<item itemtype="Connector" uid="Connector-122" startpinid="Ssd1306-17-PinSck" endpinid="Tunnel-53-pin" pointList="-84,120,-84,132" />
+
+<item itemtype="Connector" uid="Connector-121" startpinid="Ssd1306-17-PinSda" endpinid="Tunnel-52-pin" pointList="-76,120,-76,132" />
+
+<item itemtype="Connector" uid="Connector-142" startpinid="tiny85-11-PORTB4" endpinid="Tunnel-66-pin" pointList="-184,-148,-192,-148" />
+
+<item itemtype="Connector" uid="Connector-136" startpinid="tiny85-11-PORTB3" endpinid="Push-35-switch0pinN" pointList="-184,-156,-196,-156,-196,-204,-132,-204,-132,-240,-148,-240" />
+
+<item itemtype="Connector" uid="Connector-85" startpinid="tiny85-11-PORTB1" endpinid="Push-34-switch0pinN" pointList="-136,-148,-92,-148,-92,-208,-56,-208,-56,-240,-76,-240" />
+
+<item itemtype="Connector" uid="Connector-132" startpinid="Node-60-2" endpinid="Node-15-1" pointList="-68,-76,0,-76" />
+
+<item itemtype="Connector" uid="Connector-129" startpinid="Node-59-2" endpinid="Node-14-1" pointList="-92,-60,-16,-60" />
+
+<item itemtype="Connector" uid="Connector-127" startpinid="Resistor-55-rPin" endpinid="Node-59-1" pointList="-116,-32,-92,-32,-92,-60" />
+
+<item itemtype="Connector" uid="Connector-128" startpinid="tiny85-11-PORTB0" endpinid="Node-59-0" pointList="-136,-140,-116,-140,-116,-60,-92,-60" />
+
+<item itemtype="Connector" uid="Connector-130" startpinid="Resistor-57-rPin" endpinid="Node-60-1" pointList="-116,-4,-68,-4,-68,-76" />
+
+<item itemtype="Connector" uid="Connector-131" startpinid="tiny85-11-PORTB2" endpinid="Node-60-0" pointList="-136,-156,-104,-156,-104,-76,-68,-76" />
+
+</circuit>

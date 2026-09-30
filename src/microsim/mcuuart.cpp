@@ -26,7 +26,7 @@ void McuUsart::bufferEmpty()
 
 void McuUsart::frameSent( uint8_t data )
 {
-    printOut( data );
+    UsartModule::frameSent( data ); // printOut() + in-memory serial capture
     m_sender->raiseInt();
 }
 

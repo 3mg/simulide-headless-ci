@@ -1,0 +1,15 @@
+{
+  "name": "button-press-release",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-22 btn-ready 5000", "equals": "found", "timeout": 10 },
+    { "cmd": "set_control Push-22 press", "equals": "ok" },
+    { "cmd": "wait_serial mega328-22 btn-pressed 3000", "equals": "found", "timeout": 8 },
+    { "cmd": "set_control Push-22 release", "equals": "ok" },
+    { "cmd": "wait_serial mega328-22 btn-released 3000", "equals": "found", "timeout": 8 },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-22", "contains": "btn-pressed" },
+    { "cmd": "serial mega328-22", "contains": "btn-released" }
+  ]
+}

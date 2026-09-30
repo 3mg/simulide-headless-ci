@@ -101,17 +101,29 @@ MainWindow::MainWindow()
     QString backPath = getConfigPath( "backup.sim2" );
     if( QFile::exists( backPath ) )
     {
-        QMessageBox msgBox;
-        msgBox.setText( tr("Looks like SimulIDE crashed...")+"\n\n"
-                       +tr("There is an auto-saved copy of the Circuit\n")
-                       +tr("You must save it with any other name if you want to keep it")+"\n\n"
-                       +tr("This file will be auto-deleted!!")+"\n");
-        msgBox.setInformativeText(tr("Do you want to open the auto-saved copy of the Circuit?"));
-        msgBox.setStandardButtons( QMessageBox::Open | QMessageBox::Discard );
-        msgBox.setDefaultButton( QMessageBox::Open );
+        // -nogui-ci/-test-ci run on the "offscreen" QPA platform with no way
+        // to click a modal dialog, so a leftover backup from a killed prior
+        // run (crash, CI timeout) would hang forever on msgBox.exec() below.
+        // Headless runs always load an explicit circuit path, so silently
+        // drop the stale backup instead of asking.
+        if( QGuiApplication::platformName() == "offscreen" )
+        {
+            QFile::remove( backPath );
+        }
+        else
+        {
+            QMessageBox msgBox;
+            msgBox.setText( tr("Looks like SimulIDE crashed...")+"\n\n"
+                           +tr("There is an auto-saved copy of the Circuit\n")
+                           +tr("You must save it with any other name if you want to keep it")+"\n\n"
+                           +tr("This file will be auto-deleted!!")+"\n");
+            msgBox.setInformativeText(tr("Do you want to open the auto-saved copy of the Circuit?"));
+            msgBox.setStandardButtons( QMessageBox::Open | QMessageBox::Discard );
+            msgBox.setDefaultButton( QMessageBox::Open );
 
-        if( msgBox.exec() == QMessageBox::Open ) CircuitWidget::self()->loadCirc( backPath );
-        else                                     QFile::remove( backPath ); // Remove backup file
+            if( msgBox.exec() == QMessageBox::Open ) CircuitWidget::self()->loadCirc( backPath );
+            else                                     QFile::remove( backPath ); // Remove backup file
+        }
     }
 }
 MainWindow::~MainWindow(){ }

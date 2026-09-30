@@ -9,6 +9,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QSettings>
+#include <QGuiApplication>
 
 #include "circuitwidget.h"
 #include "editorwindow.h"
@@ -270,14 +271,19 @@ bool CircuitWidget::newCircuit()
     if( EditorWindow::self() && EditorWindow::self()->debugStarted() ) EditorWindow::self()->stop();
     else if( Simulator::self() ) powerCircOff();
     
-    if( MainWindow::self()->windowTitle().endsWith('*') )
+    if( MainWindow::self()->windowTitle().endsWith('*')
+        && QGuiApplication::platformName() != "offscreen" )
     {
+        // Skipped under -nogui-ci/-test-ci (offscreen platform): no user is
+        // present to click Save/Discard/Cancel, and headless runs always
+        // want the freshly-requested circuit loaded deterministically —
+        // an unanswered modal here would hang the process forever.
         const QMessageBox::StandardButton ret
         = QMessageBox::warning(this, "CircuitWidget::newCircuit",
                                tr("\nCircuit has been modified.\n"
                                   "Do you want to save your changes?\n"),
           QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
-                               
+
         if     ( ret == QMessageBox::Save )   saveCirc();
         else if( ret == QMessageBox::Cancel ) return false;
     }

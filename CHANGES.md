@@ -95,7 +95,27 @@ Supporting changes to make this possible:
   Switched to system `clang`/`clang++` for macOS builds (Linux is
   unaffected and remains the primary CI target).
 
-## 6. Docker image
+## 6. Offscreen-safe modal dialogs
+
+`-nogui-ci`/`-test-ci` inherit `MainWindow`/`CircuitWidget` GUI code largely
+as-is, including two blocking `QMessageBox::exec()` calls: the crash-recovery
+prompt (`MainWindow` constructor, shown when a `backup.sim2` autosave exists)
+and the unsaved-changes prompt (`CircuitWidget::newCircuit()`, shown when
+loading a new circuit over a modified one). Under `QT_QPA_PLATFORM=offscreen`
+these dialogs are created but nothing can ever click them — the process
+hangs forever (0% CPU, no output, no crash). In practice this means a single
+prior run that gets killed (CI timeout, crash) leaves `backup.sim2` behind
+and poisons every subsequent `-nogui-ci`/`-test-ci` invocation until someone
+manually deletes it.
+
+Fixed in `src/mainwindow.cpp` and `src/gui/circuitwidget/circuitwidget.cpp`:
+both dialogs are skipped when `QGuiApplication::platformName() == "offscreen"`.
+The crash-recovery backup is silently removed instead of offered; unsaved
+changes are silently discarded in favor of the freshly-requested circuit.
+Plain `-nogui`/`-test`/normal GUI launches (`platformName() != "offscreen"`)
+are unaffected — both dialogs behave exactly as upstream there.
+
+## 7. Docker image
 
 `docker/Dockerfile` — multi-stage build (Ubuntu 22.04 build stage, minimal
 Qt-runtime-only final stage), entrypoint `simulide -nogui-ci`. See

@@ -1,0 +1,8 @@
+{
+  "name": "wait-timeout",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-9 never-happens 300", "equals": "timeout" }
+  ]
+}

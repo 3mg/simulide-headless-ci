@@ -1,0 +1,13 @@
+{
+  "name": "lifecycle-status",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "status", "equals": "stopped" },
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-1 hello 5000", "equals": "found" },
+    { "cmd": "status", "equals": "running" },
+    { "cmd": "stop", "equals": "ok" },
+    { "sleep_ms": 200 },
+    { "cmd": "status", "equals": "stopped" }
+  ]
+}

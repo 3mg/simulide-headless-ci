@@ -1,0 +1,10 @@
+{
+  "name": "unknown-command",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "status", "equals": "stopped" },
+    { "cmd": "bogus_ping", "equals": "error: unknown command: bogus_ping" },
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-10 hello 5000", "equals": "found" }
+  ]
+}

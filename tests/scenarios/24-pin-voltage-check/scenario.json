@@ -1,0 +1,11 @@
+{
+  "name": "pin-voltage-check",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-24 gpio-ready 5000", "equals": "found", "timeout": 10 },
+    { "sleep_ms": 100 },
+    { "cmd": "pin_voltage mega328-24 PORTD4", "parse": "float", "min": 4.5, "max": 5.5 },
+    { "cmd": "pin_voltage mega328-24 PORTD5", "parse": "float", "min": -0.5, "max": 0.5 }
+  ]
+}

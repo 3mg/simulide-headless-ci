@@ -1,0 +1,11 @@
+{
+  "name": "pot-adc-midpoint",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-23 adc-ready 5000", "equals": "found", "timeout": 10 },
+    { "cmd": "set_control Pot-23 5000", "equals": "ok" },
+    { "cmd": "wait 100", "equals": "ok", "timeout": 10 },
+    { "cmd": "pin_voltage Pot-23 PinM", "parse": "float", "min": 2.0, "max": 3.0 }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "pot-three-positions",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "set_control Pot-29 1000", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-29 PinM", "parse": "float", "min": 4.0, "max": 4.6 },
+    { "cmd": "set_control Pot-29 5000", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-29 PinM", "parse": "float", "min": 2.0, "max": 3.0 },
+    { "cmd": "set_control Pot-29 9000", "equals": "ok" },
+    { "cmd": "wait 50", "equals": "ok", "timeout": 5 },
+    { "cmd": "pin_voltage Pot-29 PinM", "parse": "float", "min": 0.2, "max": 0.8 }
+  ]
+}

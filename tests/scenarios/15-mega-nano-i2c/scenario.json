@@ -1,0 +1,13 @@
+{
+  "name": "mega-nano-i2c",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "status", "equals": "stopped" },
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial Mega-1 initialized 10000", "equals": "found", "timeout": 15 },
+    { "cmd": "wait_serial Mega-1 TEST PASSED 50000", "equals": "found", "timeout": 55 },
+    { "cmd": "serial Mega-1", "contains": "value=512" },
+    { "cmd": "serial Mega-1", "contains": "type=1" },
+    { "cmd": "serial Mega-1", "contains": "pos=0" }
+  ]
+}

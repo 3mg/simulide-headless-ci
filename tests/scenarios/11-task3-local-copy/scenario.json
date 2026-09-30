@@ -1,0 +1,13 @@
+{
+  "name": "task3-local-copy",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "status", "equals": "stopped" },
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial Mega-1 Ready. 5000", "equals": "found" },
+    { "cmd": "wait_serial Mega-1 initialized 5000", "equals": "found" },
+    { "sleep_ms": 100 },
+    { "cmd": "serial Mega-1", "contains": "Slave 0x10 initialized" },
+    { "cmd": "serial Mega-1", "contains": "Slave 0x11 initialized" }
+  ]
+}

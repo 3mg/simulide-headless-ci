@@ -1,0 +1,17 @@
+{
+  "name": "load-circuit",
+  "circuit": "source.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-7 hello 5000", "equals": "found" },
+    { "cmd": "stop", "equals": "ok" },
+    { "sleep_ms": 200 },
+    { "cmd": "load target.sim1", "equals": "ok" },
+    { "sleep_ms": 500 },
+    { "cmd": "status", "equals": "stopped" },
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-8 hello 5000", "equals": "found" },
+    { "sleep_ms": 100 },
+    { "cmd": "serial mega328-8", "contains": "hello simulide" }
+  ]
+}

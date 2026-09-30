@@ -1,0 +1,11 @@
+{
+  "name": "wait-simtime",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-3 hello 5000", "equals": "found" },
+    { "cmd": "simtime", "parse": "int", "capture": "t0", "min": 1 },
+    { "cmd": "wait 100", "equals": "ok" },
+    { "cmd": "simtime", "parse": "int", "min_from": { "var": "t0", "delta": 100000 } }
+  ]
+}

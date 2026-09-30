@@ -1,0 +1,332 @@
+/***************************************************************************
+ *   Copyright (C) 2012 by Santiago González                               *
+ *                                                                         *
+ ***( see copyright.txt file at root folder )*******************************/
+
+#include <QDomDocument>
+
+#include "chip.h"
+#include "circuitwidget.h"
+#include "mainwindow.h"
+#include "simulator.h"
+#include "connector.h"
+#include "circuit.h"
+#include "utils.h"
+#include "pin.h"
+
+#define tr(str) simulideTr("Chip",str)
+
+Chip::Chip( QString type, QString id, QString device )
+    : Component( type, id )
+    , eElement( id )
+    , m_label( this )
+{
+    m_id = id;
+    m_device = device;
+
+    QStringList list = id.split("-");
+    if( list.size() > 1 ) m_name = list.at( list.size()-2 ); // for example: "atmega328-1" to: "atmega328"
+
+    m_subcType = "None";
+    m_isBoard = false;
+    m_isLS = false;
+    m_initialized = false;
+    m_pkgeFile = "";
+    m_backPixmap = NULL;
+    m_backData   = NULL;
+
+    m_topMargin    = 0;
+    m_bottomMargin = 0;
+    m_rightMargin  = 0;
+    m_leftMargin   = 0;
+    m_margins = "0,0,0,0";
+    
+    m_lsColor = QColor( 255, 255, 255 );
+    m_icColor = QColor( 50, 50, 70 );
+
+    QFont f;
+    f.setFamily("Ubuntu Mono");
+    f.setWeight( 65 );
+#ifdef Q_OS_UNIX
+    f.setLetterSpacing( QFont::PercentageSpacing, 120 );
+#else
+    //f.setLetterSpacing( QFont::AbsoluteSpacing, -1 );
+    f.setWeight( 100 );
+    //f.setStretch( 99 );
+#endif
+    f.setPixelSize(5);
+
+    m_label.setFont( f );
+    m_label.setDefaultTextColor( QColor( 125, 125, 110 ) );
+    m_label.setAcceptedMouseButtons( 0 );
+    m_label.setRotation(-90 );
+    m_label.setVisible( true );
+    
+    setLabelPos( m_area.x(), m_area.y()-20, 0);
+    setShowId( true );
+}
+Chip::~Chip()
+{
+    if( m_backPixmap ) delete m_backPixmap;
+}
+
+void Chip::initChip()
+{
+    m_error = 0;
+
+    QDir circuitDir = QFileInfo( Circuit::self()->getFilePath() ).absoluteDir();
+    QString fileNameAbs = circuitDir.absoluteFilePath( m_pkgeFile );
+
+    QFile pfile( fileNameAbs );
+    if( !pfile.exists() )   // Check if package file exist, if not try LS or no LS
+    {
+        if( m_initialized ) { m_error = 1; return; }
+        if     ( m_pkgeFile.endsWith("_LS.package")) m_pkgeFile.replace( "_LS.package", ".package" );
+        else if( m_pkgeFile.endsWith(".package"))    m_pkgeFile.replace( ".package", "_LS.package" );
+        else{
+            m_error = 1;
+            qDebug() << "Chip::initChip: No package files found.\n";
+        }
+        fileNameAbs = circuitDir.absoluteFilePath( m_pkgeFile );
+    }
+    QDomDocument domDoc = fileToDomDoc( fileNameAbs, "Chip::initChip" );
+    QDomElement   root  = domDoc.documentElement();
+
+    if( root.tagName() == "packageB" ) initPackage( root );
+    else{
+        qDebug() <<"Chip::initChip"<<"Error: Not valid Package file:\n"<< m_pkgeFile;
+        m_error = 3;
+        return;
+    }
+    m_initialized = true;
+}
+
+void Chip::setName( QString name )
+{
+    m_name = name;
+    m_label.setPlainText( m_name );
+    m_label.adjustSize();
+    m_label.setY( m_area.height()/2+m_label.textWidth()/2 );
+    m_label.setX( ( m_area.width()/2-m_label.boundingRect().height()/2 ) );
+    setflip();
+}
+
+void Chip::initPackage( QDomElement root )
+{
+    if( m_pkgeFile.endsWith( "_LS.package" )) m_isLS = true;
+    else                                      m_isLS = false;
+
+    if( m_isLS ) m_color = m_lsColor;
+    else         m_color = m_icColor;
+
+    m_width   = root.attribute( "width" ).toInt();
+    m_height  = root.attribute( "height" ).toInt();
+    m_area = QRect( 0, 0, 8*m_width, 8*m_height );
+
+    for( Pin* pin : m_unusedPins ) if( pin ) deletePin( pin );
+    m_unusedPins.clear();
+    m_ePin.clear();
+    m_pin.clear();
+
+    if( root.hasAttribute("type") ) setSubcTypeStr( root.attribute("type") );
+    if( root.hasAttribute("background") ) setBackground( root.attribute("background") );
+    if( this->isBoard() ) setTransformOriginPoint( toGrid( boundingRect().center()) );
+    if( root.hasAttribute("name") )
+    {
+        QString name = root.attribute("name");
+        if( name.toLower() != "package" ) m_name = name;
+    }
+
+    int chipPos = 0;
+    QDomNode node = root.firstChild();
+    while( !node.isNull() )
+    {
+        QDomElement element = node.toElement();
+        if( element.tagName() == "pin" )
+        {
+            QString type  = element.attribute("type" );
+            QString label = element.attribute("label");
+            QString id    = element.attribute("id").remove(" ");
+
+            int xpos   = element.attribute("xpos"  ).toInt();
+            int ypos   = element.attribute("ypos"  ).toInt();
+            int angle  = element.attribute("angle" ).toInt();
+            int length = element.attribute("length").toInt();
+            int space  = element.attribute("space" ).toInt();
+
+            chipPos++;
+            addNewPin( id, type, label, chipPos, xpos, ypos, angle, length, space );
+        }
+        node = node.nextSibling();
+    }
+    setName( m_name );
+    update();
+}
+
+void Chip::addNewPin( QString id, QString type, QString label, int pos, int xpos, int ypos, int angle, int length, int space )
+{
+    if( type == "unused" || type == "nc" )
+    {
+        Pin* pin = new Pin( angle, QPoint(xpos, ypos), m_id+"-"+id, pos-1, this ); // pos in package starts at 1
+
+        pin->setSpace( space );
+
+        pin->setUnused( true ); // Chip::addPin is only for unused Pins
+        if( m_isLS )
+        {
+            pin->setVisible( false );
+            label = "";
+        }
+        pin->setLabelText( label );
+        pin->setLength( length );
+        pin->setFlag( QGraphicsItem::ItemStacksBehindParent, false );
+
+        m_unusedPins.append( pin );
+    }else{
+        Pin* pin = addPin( id, type, label, pos, xpos, ypos, angle, length, space );
+        m_ePin.emplace_back( pin );
+        m_pin.emplace_back( pin );
+    }
+}
+
+void Chip::setLogicSymbol( bool ls )
+{
+    if( m_initialized && (m_isLS == ls) ) return;
+
+    if( Simulator::self()->isRunning() ) CircuitWidget::self()->powerCircOff();
+
+    if(  ls && m_pkgeFile.endsWith(".package"))    m_pkgeFile.replace(".package", "_LS.package" );
+    if( !ls && m_pkgeFile.endsWith("_LS.package")) m_pkgeFile.replace("_LS.package", ".package" );
+
+    m_error = 0;
+    Chip::initChip();
+    
+    if( m_error == 0 ) Circuit::self()->update();
+}
+
+void Chip::setBackground( QString bck )
+{
+    m_background = bck;
+
+    if( m_backPixmap )
+    {
+        delete m_backPixmap;
+        m_backPixmap = NULL;
+    }
+    if( bck.startsWith("color") )
+    {
+        bck.remove("color").remove("(").remove(")").remove(" ");
+        QStringList rgb = bck.split(",");
+        if( rgb.size() < 3 ) return;
+
+        m_color = QColor( rgb.at(0).toInt(), rgb.at(1).toInt(), rgb.at(2).toInt() );
+    }
+    else if( bck != "" ){
+        QDir dir = QFileInfo( m_pkgeFile ).absoluteDir();
+        QString pixmapPath = dir.absoluteFilePath( bck );  // Image in subcircuit folder
+
+        if( !QFile::exists( pixmapPath ) ){
+            dir = QFileInfo( Circuit::self()->getFilePath() ).absoluteDir();
+            pixmapPath = dir.absoluteFilePath( bck );    // Image in circuit/data folder
+        }
+        if( !QFile::exists( pixmapPath ) ) pixmapPath = MainWindow::self()->getDataFilePath("images/"+bck );
+        if( QFile::exists( pixmapPath ) ) m_backPixmap = new QPixmap( pixmapPath );
+    }
+    update();
+}
+
+void Chip::setflip()
+{
+    Component::setflip();
+    m_label.setTransform( QTransform::fromScale( m_Hflip, m_Vflip ) );
+    int xDelta = m_Hflip*m_label.boundingRect().height()/2;
+    int yDelta = m_Vflip*m_label.textWidth()/2;
+    m_label.setY( m_area.height()/2+yDelta );
+    m_label.setX( ( m_area.width()/2-xDelta ) );
+}
+
+void Chip::findHelp()
+{
+    QString helpFile = changeExt( m_dataFile, "txt" );
+    if( QFileInfo::exists( helpFile ) ) m_help = fileToString( helpFile, "Chip::findHelp" );
+    else                                m_help = MainWindow::self()->getHelp( m_name, false );
+}
+
+void Chip::setMargins( QString margins )
+{
+    m_margins = margins;
+
+    QStringList mList = margins.split(",");
+    mList.removeAll("");
+    if( margins.size() ) m_topMargin    = mList.takeFirst().toInt();
+    if( margins.size() ) m_bottomMargin = mList.takeFirst().toInt();
+    if( margins.size() ) m_rightMargin  = mList.takeFirst().toInt();
+    if( margins.size() ) m_leftMargin   = mList.takeFirst().toInt();
+}
+
+QString Chip::getDevice( QString id ) // Static
+{
+    QString device;
+    QStringList list = id.split("-");
+    if( list.size() > 1 ){
+        device = list.at( list.size()-2 ); // for example: "atmega328-1" to: "atmega328"
+        list.takeLast();
+    }
+
+    if( Circuit::self()->getSubcircuit() ) // Nested SubCircuit
+    {
+        if( device.contains("@") ) list = device.split("@"); // Nested subcircuit not supported for versions < 1916
+
+        if( list.size() > 1 )  // Subcircuit inside Subcircuit: 1@74HC00 to 74HC00
+        {
+            QString n = list.first();
+            bool ok = false;
+            n.toInt(&ok);
+            if( ok ) device = list.last();
+        }
+    }
+    return device;
+}
+
+void Chip::paint( QPainter* p, const QStyleOptionGraphicsItem* o, QWidget* w )
+{
+    Component::paint( p, o, w );
+
+    QRect imgArea = QRect( m_area.x()+m_leftMargin
+                         , m_area.y()+m_topMargin
+                         , m_area.width()-m_leftMargin-m_rightMargin
+                         , m_area.height()-m_topMargin-m_bottomMargin );
+
+    if( m_backPixmap ) p->drawPixmap( imgArea, *m_backPixmap );
+    else{
+        p->drawRoundedRect( m_area, 1, 1);
+        if( m_backData  )
+        {
+            double w = m_backData->size();
+            if( w ){
+                double h = m_backData->at(0).size();
+
+                QImage img( w*3, h*3, QImage::Format_RGB32 );
+                QPainter painter;
+                painter.begin( &img );
+
+                for( int col=0; col<w; col++ )
+                {
+                    int x = col*3;
+
+                    for( int y=0; y<h; y++ )
+                        painter.fillRect( QRectF( x, y*3, 3, 3 ), QColor(m_backData->at(col).at(y) ) );
+                }
+                painter.end();
+                p->drawImage( imgArea, img );
+            }
+        }
+        else if( !m_isLS && m_background.isEmpty() )
+        {
+            p->setPen( QColor( 170, 170, 150 ) );
+            if( m_width == m_height ) p->drawEllipse( 4, 4, 4, 4);
+            else                      p->drawArc( boundingRect().width()/2-6, -4, 8, 8, 0, -2880 /* -16*180 */ );
+        }
+    }
+    Component::paintSelected( p );
+}

@@ -1,0 +1,41 @@
+/***************************************************************************
+ *   Copyright (C) 2022 by Santiago González                               *
+ *                                                                         *
+ ***( see copyright.txt file at root folder )*******************************/
+
+#include "board.h"
+#include "circuit.h"
+#include "shield.h"
+
+BoardSubc::BoardSubc( QString type, QString id, QString device )
+         : SubCircuit( type, id, device )
+{
+    m_graphical = true;
+    m_isBoard = true;
+    m_subcType = "Board";
+    m_parentBoard = NULL;
+}
+BoardSubc::~BoardSubc(){}
+
+void BoardSubc::setLogicSymbol( bool ls )
+{
+    if( m_shields.size() ) return;
+    Chip::setLogicSymbol( ls );
+}
+
+void BoardSubc::attachShield( ShieldSubc* shield )
+{
+    if( !m_shields.contains( shield ) ) m_shields.append( shield );
+}
+
+QString BoardSubc::toString()
+{
+    QString toStr;
+    for( ShieldSubc* shield : m_shields )
+    {
+        toStr += shield->toString();
+    }
+    toStr += SubCircuit::toString();
+    return toStr;
+}
+

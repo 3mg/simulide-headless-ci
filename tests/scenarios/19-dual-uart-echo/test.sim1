@@ -1,0 +1,11 @@
+<circuit version="1.1.0-SR2" rev="260418" stepSize="1000000" stepsPS="1000000" NLsteps="100000" reaStep="1000000" animate="0" >
+
+<!-- Wokwi parity: multi-component wait-serial chain — two MCUs verified independently -->
+<item itemtype="MCU" CircId="mega328-19a" mainComp="false" Show_id="true" Show_Val="true" Pos="-120,0" rotation="0" hflip="1" vflip="1" label="initiator" idLabPos="-12,119" labelrot="0" valLabPos="13,72" valLabRot="-90" Frequency="16 MHz" Program="../../firmware-assets/uart-link-initiator328.hex" Auto_Load="false" saveEepr="false" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" SerialMon="-1" />
+
+<item itemtype="MCU" CircId="mega328-19b" mainComp="false" Show_id="true" Show_Val="true" Pos="80,0" rotation="0" hflip="1" vflip="1" label="responder" idLabPos="-12,119" labelrot="0" valLabPos="13,72" valLabRot="-90" Frequency="16 MHz" Program="../../firmware-assets/uart-link-responder328.hex" Auto_Load="false" saveEepr="false" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" SerialMon="-1" />
+
+<item itemtype="Connector" uid="Connector-1" startpinid="mega328-19a-PORTD1" endpinid="mega328-19b-PORTD0" pointList="-136,24,64,16" />
+<item itemtype="Connector" uid="Connector-2" startpinid="mega328-19b-PORTD1" endpinid="mega328-19a-PORTD0" pointList="64,24,-136,16" />
+
+</circuit>

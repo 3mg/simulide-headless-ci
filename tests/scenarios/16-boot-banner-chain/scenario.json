@@ -1,0 +1,14 @@
+{
+  "name": "boot-banner-chain",
+  "circuit": "test.sim1",
+  "steps": [
+    { "cmd": "run", "equals": "ok" },
+    { "cmd": "wait_serial mega328-16 boot:start 5000", "equals": "found" },
+    { "cmd": "wait_serial mega328-16 boot:init-ok 5000", "equals": "found" },
+    { "cmd": "wait_serial mega328-16 boot:ready 5000", "equals": "found" },
+    { "sleep_ms": 50 },
+    { "cmd": "serial mega328-16", "contains": "boot:start" },
+    { "cmd": "serial mega328-16", "contains": "boot:init-ok" },
+    { "cmd": "serial mega328-16", "contains": "boot:ready" }
+  ]
+}
